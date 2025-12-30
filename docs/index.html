@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Unity Web Player | Shorted</title>
+    <link rel="shortcut icon" href="TemplateData/favicon.ico">
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto:wght@400;700&display=swap');
+      
+      * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+      }
+      
+      html, body {
+          background: #000; /* Black background for letterboxing */
+          font-family: 'Roboto', sans-serif;
+          overflow: hidden;
+          width: 100%;
+          height: 100%;
+      }
+
+      /* Main container organizes the entire page layout */
+      #page-container {
+          width: 100vw;
+          height: 100vh;
+          display: flex;
+          flex-direction: column;
+          background: linear-gradient(135deg, #0000 0%, #0000 100%);
+      }
+      
+      /* --- START: STYLES COPIED FROM EXAMPLE --- */
+      #controls {
+          background: linear-gradient(135deg, rgba(26, 26, 26, 0.95) 0%, rgba(42, 42, 42, 0.95) 100%);
+          padding: 12px 25px;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+          border-bottom: 2px solid rgba(0, 0, 0, 0.5);
+          backdrop-filter: blur(10px);
+          z-index: 10;
+          flex-shrink: 0; /* Prevents the bar from shrinking */
+      }
+      
+      .title-section { display: flex; align-items: center; gap: 15px; }
+      
+      .game-logo {
+          width: 35px; height: 35px;
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          border-radius: 8px; display: flex; align-items: center;
+          justify-content: center; font-size: 22px; color: white;
+          box-shadow: 0 4px 10px rgba(102, 126, 234, 0.3);
+      }
+      
+      .game-title {
+          color: white; font-family: 'Bebas Neue', cursive;
+          font-size: 28px; letter-spacing: 2px;
+          text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+      }
+      
+      .btn-group { display: flex; gap: 15px; align-items: center; }
+      
+      button {
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          color: white; border: none; padding: 10px 20px;
+          border-radius: 25px; cursor: pointer; font-size: 14px;
+          font-weight: 600; text-transform: uppercase; letter-spacing: 1px;
+          transition: all 0.3s ease;
+          box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+          display: flex; align-items: center;
+      }
+      
+      button:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+      }
+      
+      .btn-secondary {
+          background: rgba(255, 255, 255, 0.1);
+          border: 2px solid rgba(255, 255, 255, 0.3);
+          box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      }
+      
+      .btn-secondary:hover { background: rgba(255, 255, 255, 0.2); }
+      .icon { font-size: 16px; margin-right: 8px; }
+      /* --- END: STYLES COPIED FROM EXAMPLE --- */
+
+      /* The unity container now grows to fill available space and centers the canvas */
+      #unity-container {
+        flex: 1; /* Allows the container to grow */
+        min-height: 0; /* Necessary for flex-grow in some browsers */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      
+      #unity-canvas {
+        /* The width and height are set by the letterboxing script */
+        background: #000;
+      }
+
+      /* Loading overlay that replaces the old "Tap to Start" */
+      #loading-overlay {
+          position: fixed; top: 0; left: 0;
+          width: 100%; height: 100%;
+          background: rgba(0, 0, 0, 0.8); color: white;
+          display: flex; justify-content: center; align-items: center;
+          font-family: Arial, sans-serif; font-size: 2em; z-index: 99;
+      }
+
+      /* Styles for the rotation animation */
+      #rotation-animation {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.9);
+        color: white;
+        z-index: 100;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        font-size: 1.5em;
+      }
+
+      .phone {
+        width: 100px;
+        height: 50px;
+        border: 3px solid white;
+        border-radius: 10px;
+        animation: rotate 1.5s ease-in-out infinite alternate;
+      }
+
+      .message {
+        margin-top: 20px;
+      }
+
+      @keyframes rotate {
+        0% {
+          transform: rotate(0deg);
+        }
+        50% {
+          transform: rotate(-90deg);
+        }
+        100% {
+          transform: rotate(-90deg);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="page-container">
+      <!-- The new controls bar -->
+      <div id="controls">
+          <div class="title-section">
+              <div class="game-logo">🎮</div>
+              <h1 class="game-title">Shorted</h1>
+          </div>
+          <div class="btn-group">
+              <button id="fullscreen-button" onclick="toggleFullscreen()">
+                  <span class="icon">⛶</span><span>Fullscreen</span>
+              </button>
+              <button class="btn-secondary" onclick="restartGame()">
+                  <span class="icon">🔄</span><span>Restart</span>
+              </button>
+          </div>
+      </div>
+
+      <!-- Unity game content area -->
+      <div id="unity-container">
+        <canvas id="unity-canvas" width=1920 height=1080 tabindex="-1"></canvas>
+        <div id="unity-warning"></div>
+      </div>
+    </div>
+
+    <!-- The loading overlay (replaces "Tap to Start") -->
+    <div id="loading-overlay">
+      <div id="loading-text">Loading... 0%</div>
+    </div>
+
+    <!-- Div for rotation animation -->
+    <div id="rotation-animation">
+      <div class="phone"></div>
+      <div class="message">Please rotate your device</div>
+    </div>
+    
+    <script>
+      // --- ELEMENT SELECTORS ---
+      var pageContainer = document.querySelector("#page-container");
+      var unityContainer = document.querySelector("#unity-container");
+      var canvas = document.querySelector("#unity-canvas");
+      var loadingOverlay = document.querySelector("#loading-overlay");
+      var loadingText = document.querySelector("#loading-text");
+      var rotationAnimation = document.querySelector("#rotation-animation");
+
+      // --- START: NEW FUNCTIONS FROM EXAMPLE ---
+      function toggleFullscreen() {
+        if (!document.fullscreenElement) {
+          unityContainer.requestFullscreen().catch(err => {
+            alert(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`);
+          });
+        } else {
+          document.exitFullscreen();
+        }
+      }
+
+      function restartGame() {
+          // The simplest and most reliable way to restart a WebGL game
+          location.reload();
+      }
+      // --- END: NEW FUNCTIONS FROM EXAMPLE ---
+
+      // --- SCALING AND LETTERBOXING LOGIC (Adapted) ---
+      function applyLetterboxing() {
+          const targetAspectRatio = 1920 / 1080;
+          // We measure the container, which has the available space after the controls bar
+          let containerWidth = unityContainer.offsetWidth;
+          let containerHeight = unityContainer.offsetHeight;
+          let containerAspectRatio = containerWidth / containerHeight;
+          
+          let newWidth, newHeight;
+
+          if (containerAspectRatio > targetAspectRatio) {
+              newHeight = containerHeight;
+              newWidth = newHeight * targetAspectRatio;
+          } else {
+              newWidth = containerWidth;
+              newHeight = newWidth / targetAspectRatio;
+          }
+          
+          // Apply the calculated size to the canvas itself
+          canvas.style.width = newWidth + 'px';
+          canvas.style.height = newHeight + 'px';
+      }
+
+      window.addEventListener('resize', applyLetterboxing);
+      window.addEventListener('orientationchange', applyLetterboxing);
+
+      function unityShowBanner(msg, type) { /* ... unchanged ... */ }
+
+      var buildUrl = "Build";
+      var loaderUrl = buildUrl + "/ABN_Sorting.loader.js";
+      var config = {
+        arguments: [], dataUrl: buildUrl + "/ABN_Sorting.data",
+        frameworkUrl: buildUrl + "/ABN_Sorting.framework.js",
+        codeUrl: buildUrl + "/ABN_Sorting.wasm",
+        streamingAssetsUrl: "StreamingAssets", companyName: "DefaultCompany",
+        productName: "Shorted", productVersion: "1.0",
+        showBanner: unityShowBanner,
+      };
+
+      var meta = document.createElement('meta');
+      meta.name = 'viewport';
+      meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
+      document.getElementsByTagName('head')[0].appendChild(meta);
+
+      var script = document.createElement("script");
+      script.src = loaderUrl;
+      script.onload = () => {
+        createUnityInstance(canvas, config, (progress) => {
+          loadingText.innerHTML = `Loading... ${Math.round(progress * 100)}%`;
+        }).then((unityInstance) => {
+          // Game is loaded, just hide the overlay
+          loadingOverlay.style.display = 'none';
+        }).catch((message) => {
+          alert(message);
+        });
+      };
+      
+      // Update button text and handle screen orientation on fullscreen change
+      document.addEventListener('fullscreenchange', () => {
+        const fullscreenButton = document.getElementById('fullscreen-button');
+        if (document.fullscreenElement) {
+          fullscreenButton.innerHTML = '<span class="icon">❎</span><span>Exit</span>';
+          // Lock the screen to landscape orientation
+          screen.orientation.lock('landscape').catch(function(error) {
+            console.log(error);
+          });
+        } else {
+          fullscreenButton.innerHTML = '<span class="icon">⛶</span><span>Fullscreen</span>';
+          // Unlock the screen orientation
+          screen.orientation.unlock();
+        }
+        // Re-calculate letterboxing after a small delay to allow the DOM to update
+        setTimeout(applyLetterboxing, 100);
+      });
+
+      // Show rotation animation if in portrait mode
+      window.addEventListener('orientationchange', function() {
+        if (window.orientation === 0 || window.orientation === 180) {
+          rotationAnimation.style.display = 'flex';
+        } else {
+          rotationAnimation.style.display = 'none';
+        }
+      });
+
+      // Initial setup calls before loading starts
+      applyLetterboxing(); 
+      document.body.appendChild(script);
+    </script>
+  </body>
+</html>

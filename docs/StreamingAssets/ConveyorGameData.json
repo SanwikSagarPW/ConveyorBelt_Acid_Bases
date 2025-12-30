@@ -1,0 +1,282 @@
+{
+  "game_template": "Conveyor Classifier",
+  "topic": "Acids, Bases, and Salts",
+  "total_levels": 3,
+  "max_total_xp": 200,
+  
+  "levels": [
+    {
+      "level": 1,
+      "objective_text": "Sort substances into Acid, Base, or Neutral beakers!",
+      "conveyor_speed_modifier": 0.6,
+      "total_items_in_level": 10,
+      "item_spawn_interval_seconds": 6,
+      "xp_per_correct": 5,
+      "xp_per_incorrect": -2,
+      "combo_bonus_xp": 0,
+      "target_xp": 50,
+      "reactor": 0,
+
+      "containers": [
+        { "name": "NEUTRAL", "id": "neutral_beaker" },
+        { "name": "BASE", "id": "base_beaker" },
+        { "name": "ACID", "id": "acid_beaker" }
+      ],
+
+      "items": [
+        {
+          "id": "lemon_juice_1",
+          "display_text": "Lemon Juice",
+          "correct_category_name": "ACID",
+          "presentation_mode": "NAME"
+        },
+        {
+          "id": "soap_solution_1",
+          "display_text": "Soap Solution",
+          "correct_category_name": "BASE",
+          "presentation_mode": "NAME"
+        },
+        {
+          "id": "pure_water_1",
+          "display_text": "Pure Water",
+          "correct_category_name": "NEUTRAL",
+          "presentation_mode": "NAME"
+        },
+        {
+          "id": "vinegar_1",
+          "display_text": "Vinegar",
+          "correct_category_name": "ACID",
+          "presentation_mode": "NAME"
+        },
+        {
+          "id": "baking_soda_1",
+          "display_text": "Baking Soda Solution",
+          "correct_category_name": "BASE",
+          "presentation_mode": "NAME"
+        },
+        {
+          "id": "SaltSolution",
+          "display_text": "Milk",
+          "correct_category_name": "NEUTRAL",
+          "presentation_mode": "NAME"
+        },
+        {
+          "id": "Curd",
+          "display_text": "Dilute HCl",
+          "correct_category_name": "ACID",
+          "presentation_mode": "NAME"
+        },
+        {
+          "id": "Soda",
+          "display_text": "Bleach",
+          "correct_category_name": "ACID",
+          "presentation_mode": "NAME"
+        },
+        {
+          "id": "Sugar_Solution",
+          "display_text": "Salt Solution",
+          "correct_category_name": "NEUTRAL",
+          "presentation_mode": "NAME"
+        },
+        {
+          "id": "Window_Cleaner",
+          "display_text": "Window_Cleaner",
+          "correct_category_name": "BASE",
+          "presentation_mode": "NAME"
+        }
+      ]
+    },
+
+    {
+      "level": 2,
+      "objective_text": "Observe the reactions and sort substances correctly!",
+      "conveyor_speed_modifier": 0.5,
+      "total_items_in_level": 10,
+      "item_spawn_interval_seconds": 5,
+      "xp_per_correct": 7,
+      "xp_per_incorrect": -3,
+      "combo_bonus_xp": 0,
+      "target_xp": 70,
+      "reactor": 1,
+
+      "containers": [
+        { "name": "NEUTRAL", "id": "neutral_beaker" },
+        { "name": "BASE", "id": "base_beaker" },
+        { "name": "ACID", "id": "acid_beaker" }
+      ],
+
+      "items": [
+        {
+          "id": "Apple_Juice",
+          "display_text": "pH: ~3.0",
+          "correct_category_name": "ACID",
+          "presentation_mode": "PROPERTY_CUE",
+          "reaction_type": "LITMUS_RED"
+        },
+        {
+          "id": "Bleach",
+          "display_text": "pH: ~12.0",
+          "correct_category_name": "BASE",
+          "presentation_mode": "PROPERTY_CUE",
+          "reaction_type": "LITMUS_BLUE"
+        },
+        {
+          "id": "Distilled_Water",
+          "display_text": "pH: 7.0",
+          "correct_category_name": "NEUTRAL",
+          "presentation_mode": "PROPERTY_CUE",
+          "hint_text": "No litmus change?"
+        },
+        {
+          "id": "Ammonia",
+          "display_text": "pH: ~11.0",
+          "correct_category_name": "BASE",
+          "presentation_mode": "PROPERTY_CUE",
+          "reaction_type": "PH_INDICATOR_RED"
+        },
+        {
+          "id": "Antacid",
+          "display_text": "pH: ~9.0",
+          "correct_category_name": "BASE",
+          "presentation_mode": "PROPERTY_CUE",
+          "reaction_type": "PH_INDICATOR_BLUE"
+        },
+        {
+          "id": "Milk_of_magnesia",
+          "display_text": "pH: ~10.5",
+          "correct_category_name": "BASE",
+          "presentation_mode": "PROPERTY_CUE",
+          "reaction_type": "PH_INDICATOR_GREEN"
+        },
+        {
+          "id": "chemical_x",
+          "display_text": "Ph > 7",
+          "correct_category_name": "BASE",
+          "presentation_mode": "PROPERTY_CUE",
+          "hint_text": "Sour taste indicator?"
+        },
+        {
+          "id": "orange_Juice",
+          "display_text": "pH: ~3.5",
+          "correct_category_name": "ACID",
+          "presentation_mode": "PROPERTY_CUE",
+          "hint_text": "Bitter taste indicator?"
+        },
+        {
+          "id": "Shampoo",
+          "display_text": "pH: ~7.0",
+          "correct_category_name": "NEUTRAL",
+          "presentation_mode": "PROPERTY_CUE",
+          "reaction_type": "NO_REACTION"
+        },
+        {
+          "id": "Tarmarid_Solution",
+          "display_text": "pH: ~3.0",
+          "correct_category_name": "ACID",
+          "presentation_mode": "PROPERTY_CUE",
+          "reaction_type": "METAL_BUBBLES"
+        }
+      ]
+    },
+
+    {
+      "level": 3,
+      "objective_text": "Expert sorting: Identify weak and strong acids/bases by image alone!",
+      "conveyor_speed_modifier": 0.5,
+      "total_items_in_level": 10,
+      "item_spawn_interval_seconds": 9,
+      "xp_per_correct": 8,
+      "xp_per_incorrect": -4,
+      "combo_bonus_xp": 0,
+      "target_xp": 80,
+      "reactor": 0,
+
+      "containers": [
+        { "name": "WEAK__ACID", "icon": "weak_acid_beaker.png" },
+        { "name": "STRONG_ACID","icon": "strong_acid_beaker.png" },
+        { "name": "WEAK_BASE","icon": "weak_base_beaker.png" },
+        { "name": "STRONG_BASE","icon": "strong_base_beaker.png" },
+        { "name": "NEUTRAL","icon": "neutral_beaker.png" }
+      ],
+
+      "items": [
+        {
+          "id": "amonium_hydroxide",
+          "display_text": "",
+          "correct_category_name": "WEAK_BASE",
+          "presentation_mode": "IMAGE_ONLY"
+        },
+        {
+          "id": "ascorbic_acid",
+          "display_text": "",
+          "correct_category_name": "WEAK_ACID",
+          "presentation_mode": "IMAGE_ONLY"
+        },
+        {
+          "id": "baking_powder",
+          "display_text": "",
+          "correct_category_name": "WEAK_BASE",
+          "presentation_mode": "IMAGE_ONLY"
+        },
+        {
+          "id": "cement",
+          "display_text": "",
+          "correct_category_name": "STRONG_BASE",
+          "presentation_mode": "IMAGE_ONLY"
+        },
+        {
+          "id": "coconut_water",
+          "display_text": "",
+          "correct_category_name": "NEUTRAL",
+          "presentation_mode": "IMAGE_ONLY"
+        },
+        {
+          "id": "stomach_acid",
+          "display_text": "",
+          "correct_category_name": "STRONG_ACID",
+          "presentation_mode": "IMAGE_ONLY"
+        },
+        {
+          "id": "mango_juice",
+          "display_text": "",
+          "correct_category_name": "WEAK_ACID",
+          "presentation_mode": "IMAGE_ONLY"
+        },
+        {
+          "id": "sea_water",
+          "display_text": "",
+          "correct_category_name": "WEAK_BASE",
+          "presentation_mode": "IMAGE_ONLY"
+        },
+        {
+          "id": "sodium_Hydroxide",
+          "display_text": "",
+          "correct_category_name": "STRONG_BASE",
+          "presentation_mode": "IMAGE_ONLY"
+        },
+        {
+          "id": "sulfuric_Acid",
+          "display_text": "",
+          "correct_category_name": "STRONG_ACID",
+          "presentation_mode": "IMAGE_ONLY"
+        }
+      ]
+    }
+  ],
+
+  "star_rating_thresholds": {
+    "3_stars": 0.8,
+    "2_stars": 0.5,
+    "1_star": 0.0
+  },
+
+  "reaction_types_available": [
+    "LITMUS_RED",
+    "LITMUS_BLUE", 
+    "PH_INDICATOR_RED",
+    "PH_INDICATOR_BLUE",
+    "PH_INDICATOR_GREEN",
+    "METAL_BUBBLES",
+    "NO_REACTION"
+  ]
+}
