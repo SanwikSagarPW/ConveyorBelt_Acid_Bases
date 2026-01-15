@@ -244,13 +244,16 @@
       function unityShowBanner(msg, type) { /* ... unchanged ... */ }
 
       var buildUrl = "Build";
-      var loaderUrl = buildUrl + "/ABN_Sorting.loader.js";
+      var loaderUrl = buildUrl + "/Conveyer.loader.js";
       var config = {
-        arguments: [], dataUrl: buildUrl + "/ABN_Sorting.data",
-        frameworkUrl: buildUrl + "/ABN_Sorting.framework.js",
-        codeUrl: buildUrl + "/ABN_Sorting.wasm",
-        streamingAssetsUrl: "StreamingAssets", companyName: "DefaultCompany",
-        productName: "Shorted", productVersion: "1.0",
+        arguments: [],
+        dataUrl: buildUrl + "/Conveyer.data",
+        frameworkUrl: buildUrl + "/Conveyer.framework.js",
+        codeUrl: buildUrl + "/Conveyer.wasm",
+        streamingAssetsUrl: "StreamingAssets",
+        companyName: "DefaultCompany",
+        productName: "Shorted",
+        productVersion: "1.0",
         showBanner: unityShowBanner,
       };
 
