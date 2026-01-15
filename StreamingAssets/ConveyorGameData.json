@@ -192,7 +192,7 @@
       "reactor": 0,
 
       "containers": [
-        { "name": "WEAK__ACID", "icon": "weak_acid_beaker.png" },
+        { "name": "WEAK_ACID", "icon": "weak_acid_beaker.png" },
         { "name": "STRONG_ACID","icon": "strong_acid_beaker.png" },
         { "name": "WEAK_BASE","icon": "weak_base_beaker.png" },
         { "name": "STRONG_BASE","icon": "strong_base_beaker.png" },
