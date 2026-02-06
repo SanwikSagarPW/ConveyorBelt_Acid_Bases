@@ -31,62 +31,7 @@
           background: linear-gradient(135deg, #0000 0%, #0000 100%);
       }
       
-      /* --- START: STYLES COPIED FROM EXAMPLE --- */
-      #controls {
-          background: linear-gradient(135deg, rgba(26, 26, 26, 0.95) 0%, rgba(42, 42, 42, 0.95) 100%);
-          padding: 12px 25px;
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          box-shadow: 0 4px 20px rgba(0,0,0,0.5);
-          border-bottom: 2px solid rgba(0, 0, 0, 0.5);
-          backdrop-filter: blur(10px);
-          z-index: 10;
-          flex-shrink: 0; /* Prevents the bar from shrinking */
-      }
-      
-      .title-section { display: flex; align-items: center; gap: 15px; }
-      
-      .game-logo {
-          width: 35px; height: 35px;
-          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-          border-radius: 8px; display: flex; align-items: center;
-          justify-content: center; font-size: 22px; color: white;
-          box-shadow: 0 4px 10px rgba(102, 126, 234, 0.3);
-      }
-      
-      .game-title {
-          color: white; font-family: 'Bebas Neue', cursive;
-          font-size: 28px; letter-spacing: 2px;
-          text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-      }
-      
-      .btn-group { display: flex; gap: 15px; align-items: center; }
-      
-      button {
-          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-          color: white; border: none; padding: 10px 20px;
-          border-radius: 25px; cursor: pointer; font-size: 14px;
-          font-weight: 600; text-transform: uppercase; letter-spacing: 1px;
-          transition: all 0.3s ease;
-          box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-          display: flex; align-items: center;
-      }
-      
-      button:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
-      }
-      
-      .btn-secondary {
-          background: rgba(255, 255, 255, 0.1);
-          border: 2px solid rgba(255, 255, 255, 0.3);
-          box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-      }
-      
-      .btn-secondary:hover { background: rgba(255, 255, 255, 0.2); }
-      .icon { font-size: 16px; margin-right: 8px; }
-      /* --- END: STYLES COPIED FROM EXAMPLE --- */
+      /* --- Controls bar styles removed --- */
 
       /* The unity container now grows to fill available space and centers the canvas */
       #unity-container {
@@ -155,22 +100,6 @@
   </head>
   <body>
     <div id="page-container">
-      <!-- The new controls bar -->
-      <div id="controls">
-          <div class="title-section">
-              <div class="game-logo">🎮</div>
-              <h1 class="game-title">Shorted</h1>
-          </div>
-          <div class="btn-group">
-              <button id="fullscreen-button" onclick="toggleFullscreen()">
-                  <span class="icon">⛶</span><span>Fullscreen</span>
-              </button>
-              <button class="btn-secondary" onclick="restartGame()">
-                  <span class="icon">🔄</span><span>Restart</span>
-              </button>
-          </div>
-      </div>
-
       <!-- Unity game content area -->
       <div id="unity-container">
         <canvas id="unity-canvas" width=1920 height=1080 tabindex="-1"></canvas>
@@ -197,23 +126,6 @@
       var loadingOverlay = document.querySelector("#loading-overlay");
       var loadingText = document.querySelector("#loading-text");
       var rotationAnimation = document.querySelector("#rotation-animation");
-
-      // --- START: NEW FUNCTIONS FROM EXAMPLE ---
-      function toggleFullscreen() {
-        if (!document.fullscreenElement) {
-          unityContainer.requestFullscreen().catch(err => {
-            alert(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`);
-          });
-        } else {
-          document.exitFullscreen();
-        }
-      }
-
-      function restartGame() {
-          // The simplest and most reliable way to restart a WebGL game
-          location.reload();
-      }
-      // --- END: NEW FUNCTIONS FROM EXAMPLE ---
 
       // --- SCALING AND LETTERBOXING LOGIC (Adapted) ---
       function applyLetterboxing() {
@@ -275,24 +187,6 @@
         });
       };
       
-      // Update button text and handle screen orientation on fullscreen change
-      document.addEventListener('fullscreenchange', () => {
-        const fullscreenButton = document.getElementById('fullscreen-button');
-        if (document.fullscreenElement) {
-          fullscreenButton.innerHTML = '<span class="icon">❎</span><span>Exit</span>';
-          // Lock the screen to landscape orientation
-          screen.orientation.lock('landscape').catch(function(error) {
-            console.log(error);
-          });
-        } else {
-          fullscreenButton.innerHTML = '<span class="icon">⛶</span><span>Fullscreen</span>';
-          // Unlock the screen orientation
-          screen.orientation.unlock();
-        }
-        // Re-calculate letterboxing after a small delay to allow the DOM to update
-        setTimeout(applyLetterboxing, 100);
-      });
-
       // Show rotation animation if in portrait mode
       window.addEventListener('orientationchange', function() {
         if (window.orientation === 0 || window.orientation === 180) {
