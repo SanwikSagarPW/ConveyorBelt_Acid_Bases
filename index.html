@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Unity Web Player | Shorted</title>
+    <link rel="shortcut icon" href="TemplateData/favicon.ico">
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto:wght@400;700&display=swap');
+      
+      * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+      }
+      
+      html, body {
+          background: #000; /* Black background for letterboxing */
+          font-family: 'Roboto', sans-serif;
+          overflow: hidden;
+          width: 100%;
+          height: 100%;
+      }
+
+      /* Main container organizes the entire page layout */
+      #page-container {
+          width: 100vw;
+          height: 100vh;
+          display: flex;
+          flex-direction: column;
+          background: linear-gradient(135deg, #0000 0%, #0000 100%);
+      }
+      
+      /* --- Controls bar styles removed --- */
+
+      /* The unity container now grows to fill available space and centers the canvas */
+      #unity-container {
+        flex: 1; /* Allows the container to grow */
+        min-height: 0; /* Necessary for flex-grow in some browsers */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      
+      #unity-canvas {
+        /* The width and height are set by the letterboxing script */
+        background: #000;
+      }
+
+      /* Loading overlay that replaces the old "Tap to Start" */
+      #loading-overlay {
+          position: fixed; top: 0; left: 0;
+          width: 100%; height: 100%;
+          background: rgba(0, 0, 0, 0.8); color: white;
+          display: flex; justify-content: center; align-items: center;
+          font-family: Arial, sans-serif; font-size: 2em; z-index: 99;
+      }
+
+      /* Styles for the rotation animation */
+      #rotation-animation {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.9);
+        color: white;
+        z-index: 100;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        font-size: 1.5em;
+      }
+
+      .phone {
+        width: 100px;
+        height: 50px;
+        border: 3px solid white;
+        border-radius: 10px;
+        animation: rotate 1.5s ease-in-out infinite alternate;
+      }
+
+      .message {
+        margin-top: 20px;
+      }
+
+      @keyframes rotate {
+        0% {
+          transform: rotate(0deg);
+        }
+        50% {
+          transform: rotate(-90deg);
+        }
+        100% {
+          transform: rotate(-90deg);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="page-container">
+      <!-- Unity game content area -->
+      <div id="unity-container">
+        <canvas id="unity-canvas" width=1920 height=1080 tabindex="-1"></canvas>
+        <div id="unity-warning"></div>
+      </div>
+    </div>
+
+    <!-- The loading overlay (replaces "Tap to Start") -->
+    <div id="loading-overlay">
+      <div id="loading-text">Loading... 0%</div>
+    </div>
+
+    <!-- Div for rotation animation -->
+    <div id="rotation-animation">
+      <div class="phone"></div>
+      <div class="message">Please rotate your device</div>
+    </div>
+    
+    <script>
+      // --- ELEMENT SELECTORS ---
+      var pageContainer = document.querySelector("#page-container");
+      var unityContainer = document.querySelector("#unity-container");
+      var canvas = document.querySelector("#unity-canvas");
+      var loadingOverlay = document.querySelector("#loading-overlay");
+      var loadingText = document.querySelector("#loading-text");
+      var rotationAnimation = document.querySelector("#rotation-animation");
+
+      // --- SCALING AND LETTERBOXING LOGIC (Adapted) ---
+      function applyLetterboxing() {
+          const targetAspectRatio = 1920 / 1080;
+          // We measure the container, which has the available space after the controls bar
+          let containerWidth = unityContainer.offsetWidth;
+          let containerHeight = unityContainer.offsetHeight;
+          let containerAspectRatio = containerWidth / containerHeight;
+          
+          let newWidth, newHeight;
+
+          if (containerAspectRatio > targetAspectRatio) {
+              newHeight = containerHeight;
+              newWidth = newHeight * targetAspectRatio;
+          } else {
+              newWidth = containerWidth;
+              newHeight = newWidth / targetAspectRatio;
+          }
+          
+          // Apply the calculated size to the canvas itself
+          canvas.style.width = newWidth + 'px';
+          canvas.style.height = newHeight + 'px';
+      }
+
+      window.addEventListener('resize', applyLetterboxing);
+      window.addEventListener('orientationchange', applyLetterboxing);
+
+      function unityShowBanner(msg, type) { /* ... unchanged ... */ }
+
+      var buildUrl = "Build";
+      var loaderUrl = buildUrl + "/Conveyer.loader.js";
+      var config = {
+        arguments: [],
+        dataUrl: buildUrl + "/Conveyer.data",
+        frameworkUrl: buildUrl + "/Conveyer.framework.js",
+        codeUrl: buildUrl + "/Conveyer.wasm",
+        streamingAssetsUrl: "StreamingAssets",
+        companyName: "DefaultCompany",
+        productName: "Shorted",
+        productVersion: "1.0",
+        showBanner: unityShowBanner,
+      };
+
+      var meta = document.createElement('meta');
+      meta.name = 'viewport';
+      meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
+      document.getElementsByTagName('head')[0].appendChild(meta);
+
+      var script = document.createElement("script");
+      script.src = loaderUrl;
+      script.onload = () => {
+        createUnityInstance(canvas, config, (progress) => {
+          loadingText.innerHTML = `Loading... ${Math.round(progress * 100)}%`;
+        }).then((unityInstance) => {
+          // Game is loaded, just hide the overlay
+          loadingOverlay.style.display = 'none';
+        }).catch((message) => {
+          alert(message);
+        });
+      };
+      
+      // Show rotation animation if in portrait mode
+      window.addEventListener('orientationchange', function() {
+        if (window.orientation === 0 || window.orientation === 180) {
+          rotationAnimation.style.display = 'flex';
+        } else {
+          rotationAnimation.style.display = 'none';
+        }
+      });
+
+      // Initial setup calls before loading starts
+      applyLetterboxing(); 
+      document.body.appendChild(script);
+    </script>
+  </body>
+</html>
