@@ -29,8 +29,12 @@ jobs:
 
       - name: Remove unused and uncompressed build files
         run: |
+          rm -f Build/GameBuild.data
+          rm -f Build/GameBuild.wasm
           rm -f Build/Conveyer.data
           rm -f Build/Conveyer.wasm
+          rm -f Build/Conveyer.data.gz
+          rm -f Build/Conveyer.wasm.gz
           rm -f Build/ABN_Sorting.*
           rm -f Build/*.unityweb
 

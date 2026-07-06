@@ -1,9 +1,9 @@
-const CACHE_NAME = 'conveyor-acid-bases-v1';
+const CACHE_NAME = 'conveyor-acid-bases-v2';
 const BUILD_FILES = [
-  'Build/Conveyer.loader.js',
-  'Build/Conveyer.framework.js',
-  'Build/Conveyer.data.gz',
-  'Build/Conveyer.wasm.gz',
+  'Build/GameBuild.loader.js',
+  'Build/GameBuild.framework.js',
+  'Build/GameBuild.data.gz',
+  'Build/GameBuild.wasm.gz',
 ];
 
 self.addEventListener('install', (event) => { self.skipWaiting(); });

@@ -10,10 +10,10 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto:wght@400;700&display=swap" media="print" onload="this.media='all'">
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto:wght@400;700&display=swap"></noscript>
-    <link rel="preload" href="Build/Conveyer.loader.js" as="script">
-    <link rel="preload" href="Build/Conveyer.framework.js" as="script">
-    <link rel="preload" href="Build/Conveyer.data.gz" as="fetch" crossorigin>
-    <link rel="preload" href="Build/Conveyer.wasm.gz" as="fetch" crossorigin>
+    <link rel="preload" href="Build/GameBuild.loader.js" as="script">
+    <link rel="preload" href="Build/GameBuild.framework.js" as="script">
+    <link rel="preload" href="Build/GameBuild.data.gz" as="fetch" crossorigin>
+    <link rel="preload" href="Build/GameBuild.wasm.gz" as="fetch" crossorigin>
     <style>
       
       * {
@@ -132,8 +132,8 @@
       }
 
       var GZ_SIZES = {
-        'Conveyer.data': 26817235,
-        'Conveyer.wasm': 47292464
+        'GameBuild.data': 26810759,
+        'GameBuild.wasm': 47297172
       };
 
       async function decompressGzip(buffer) {
@@ -224,12 +224,12 @@
       function unityShowBanner(msg, type) { /* ... unchanged ... */ }
 
       var buildUrl = "Build";
-      var loaderUrl = buildUrl + "/Conveyer.loader.js";
+      var loaderUrl = buildUrl + "/GameBuild.loader.js";
       var config = {
         arguments: [],
-        dataUrl: buildUrl + "/Conveyer.data",
-        frameworkUrl: buildUrl + "/Conveyer.framework.js",
-        codeUrl: buildUrl + "/Conveyer.wasm",
+        dataUrl: buildUrl + "/GameBuild.data",
+        frameworkUrl: buildUrl + "/GameBuild.framework.js",
+        codeUrl: buildUrl + "/GameBuild.wasm",
         streamingAssetsUrl: "StreamingAssets",
         companyName: "DefaultCompany",
         productName: "Shorted",
