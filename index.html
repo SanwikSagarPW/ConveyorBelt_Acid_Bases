@@ -177,13 +177,9 @@
           return _fetch(url, opts);
         };
 
-        var _iStreaming = WebAssembly.instantiateStreaming;
         WebAssembly.instantiateStreaming = async function(responsePromise, imports) {
-          try { return await _iStreaming(responsePromise, imports); }
-          catch(e) {
-            var buf = await (await responsePromise).arrayBuffer();
-            return WebAssembly.instantiate(buf, imports);
-          }
+          var buf = await (await responsePromise).arrayBuffer();
+          return WebAssembly.instantiate(buf, imports);
         };
       }
 
