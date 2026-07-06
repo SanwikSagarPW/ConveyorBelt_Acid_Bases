@@ -68,7 +68,7 @@
         },
         {
           "id": "Soda",
-          "display_text": "Soda",
+          "display_text": "Bleach",
           "correct_category_name": "ACID",
           "presentation_mode": "NAME"
         },
@@ -149,7 +149,7 @@
           "reaction_type": "PH_INDICATOR_GREEN"
         },
         {
-          "id": "chemical_x",
+          "id": "nh3",
           "display_text": "Ph > 7",
           "correct_category_name": "BASE",
           "presentation_mode": "PROPERTY_CUE",
@@ -192,7 +192,7 @@
       "reactor": 0,
 
       "containers": [
-        { "name": "WEAK_ACID", "icon": "weak_acid_beaker.png" },
+        { "name": "WEAK__ACID", "icon": "weak_acid_beaker.png" },
         { "name": "STRONG_ACID","icon": "strong_acid_beaker.png" },
         { "name": "WEAK_BASE","icon": "weak_base_beaker.png" },
         { "name": "STRONG_BASE","icon": "strong_base_beaker.png" },

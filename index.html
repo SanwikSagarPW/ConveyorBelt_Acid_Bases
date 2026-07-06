@@ -4,9 +4,17 @@
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Unity Web Player | Shorted</title>
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes">
     <link rel="shortcut icon" href="TemplateData/favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto:wght@400;700&display=swap" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto:wght@400;700&display=swap"></noscript>
+    <link rel="preload" href="Build/Conveyer.loader.js" as="script">
+    <link rel="preload" href="Build/Conveyer.framework.js" as="script">
+    <link rel="preload" href="Build/Conveyer.data.gz" as="fetch" crossorigin>
+    <link rel="preload" href="Build/Conveyer.wasm.gz" as="fetch" crossorigin>
     <style>
-      @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto:wght@400;700&display=swap');
       
       * {
           margin: 0;
@@ -119,6 +127,66 @@
     </div>
     
     <script>
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('sw.js').catch(() => {});
+      }
+
+      var GZ_SIZES = {
+        'Conveyer.data': 26817235,
+        'Conveyer.wasm': 47292464
+      };
+
+      async function decompressGzip(buffer) {
+        var ds = new DecompressionStream('gzip');
+        var writer = ds.writable.getWriter();
+        writer.write(buffer); writer.close();
+        var reader = ds.readable.getReader();
+        var chunks = [], total = 0;
+        while (true) {
+          var r = await reader.read();
+          if (r.done) break;
+          chunks.push(r.value); total += r.value.length;
+        }
+        var out = new Uint8Array(total), offset = 0;
+        for (var i = 0; i < chunks.length; i++) { out.set(chunks[i], offset); offset += chunks[i].length; }
+        return out.buffer;
+      }
+
+      if (typeof DecompressionStream !== 'undefined') {
+        var _fetch = window.fetch.bind(window);
+        window.fetch = async function(url, opts) {
+          var urlStr = (typeof url === 'string') ? url : (url.url || '');
+          var match = urlStr.match(/\/(Conveyer\.(data|wasm))(\?|$)/);
+          if (match) {
+            var filename = match[1];
+            var gzUrl = urlStr.replace(filename, filename + '.gz');
+            var resp = await _fetch(gzUrl, opts);
+            if (resp.ok) {
+              var compressed = await resp.arrayBuffer();
+              var decompressed = await decompressGzip(new Uint8Array(compressed));
+              var ct = filename.endsWith('.wasm') ? 'application/wasm' : 'application/octet-stream';
+              return new Response(decompressed, {
+                status: 200,
+                headers: {
+                  'Content-Type': ct,
+                  'Content-Length': String(GZ_SIZES[filename] || decompressed.byteLength)
+                }
+              });
+            }
+          }
+          return _fetch(url, opts);
+        };
+
+        var _iStreaming = WebAssembly.instantiateStreaming;
+        WebAssembly.instantiateStreaming = async function(responsePromise, imports) {
+          try { return await _iStreaming(responsePromise, imports); }
+          catch(e) {
+            var buf = await (await responsePromise).arrayBuffer();
+            return WebAssembly.instantiate(buf, imports);
+          }
+        };
+      }
+
       // --- ELEMENT SELECTORS ---
       var pageContainer = document.querySelector("#page-container");
       var unityContainer = document.querySelector("#unity-container");
@@ -168,11 +236,6 @@
         productVersion: "1.0",
         showBanner: unityShowBanner,
       };
-
-      var meta = document.createElement('meta');
-      meta.name = 'viewport';
-      meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
-      document.getElementsByTagName('head')[0].appendChild(meta);
 
       var script = document.createElement("script");
       script.src = loaderUrl;
